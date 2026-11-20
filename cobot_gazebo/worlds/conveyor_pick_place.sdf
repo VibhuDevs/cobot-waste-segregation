@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <world name="default">
+    <physics name="physics" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <gravity>0 0 -9.8</gravity>
+    <atmosphere type="adiabatic"><temperature>295</temperature><temperature_gradient>0</temperature_gradient></atmosphere>
+    <scene>
+      <ambient>0.55 0.55 0.55 1</ambient>
+      <background>0.78 0.80 0.84 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <light name="sun" type="directional">
+      <pose>0 0 4 0 0 0</pose>
+      <direction>-0.4 0.2 -1</direction>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <cast_shadows>true</cast_shadows>
+    </light>
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="ground">
+        <collision name="collision"><geometry><plane><normal>0 0 1</normal><size>8 8</size></plane></geometry></collision>
+        <visual name="visual"><geometry><plane><normal>0 0 1</normal><size>8 8</size></plane></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- The track controller transfers tangential surface velocity through contact. -->
+    <model name="conveyor">
+      <pose>0.3200 0.1400 0.0800 0 0 0</pose>
+      <static>true</static>
+      <link name="belt">
+        <collision name="belt_surface">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry><box><size>0.5000 0.1600 0.08</size></box></geometry>
+          <surface><friction><ode><mu>0.9</mu><mu2>100</mu2><fdir1>1 0 0</fdir1></ode></friction></surface>
+        </collision>
+        <visual name="belt_surface_visual">
+          <geometry><box><size>0.5000 0.1600 0.08</size></box></geometry>
+          <material><ambient>0.08 0.12 0.16 1</ambient><diffuse>0.08 0.12 0.16 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="frame">
+        <collision name="left_rail_collision"><pose>0 0.1000 0.015 0 0 0</pose><geometry><box><size>0.5400 0.035 0.12</size></box></geometry></collision>
+        <collision name="right_rail_collision"><pose>0 -0.1000 0.015 0 0 0</pose><geometry><box><size>0.5400 0.035 0.12</size></box></geometry></collision>
+        <collision name="leg_left_collision"><pose>0.1625 0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry></collision>
+        <collision name="leg_right_collision"><pose>0.1625 -0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry></collision>
+        <collision name="leg_left_rear_collision"><pose>-0.1625 0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry></collision>
+        <collision name="leg_right_rear_collision"><pose>-0.1625 -0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry></collision>
+        <visual name="left_rail"><pose>0 0.1000 0.015 0 0 0</pose><geometry><box><size>0.5400 0.035 0.12</size></box></geometry><material><ambient>0.35 0.37 0.4 1</ambient><diffuse>0.35 0.37 0.4 1</diffuse></material></visual>
+        <visual name="right_rail"><pose>0 -0.1000 0.015 0 0 0</pose><geometry><box><size>0.5400 0.035 0.12</size></box></geometry><material><ambient>0.35 0.37 0.4 1</ambient><diffuse>0.35 0.37 0.4 1</diffuse></material></visual>
+        <visual name="leg_left"><pose>0.1625 0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry><material><ambient>0.25 0.27 0.3 1</ambient><diffuse>0.25 0.27 0.3 1</diffuse></material></visual>
+        <visual name="leg_right"><pose>0.1625 -0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry><material><ambient>0.25 0.27 0.3 1</ambient><diffuse>0.25 0.27 0.3 1</diffuse></material></visual>
+        <visual name="leg_left_rear"><pose>-0.1625 0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry><material><ambient>0.25 0.27 0.3 1</ambient><diffuse>0.25 0.27 0.3 1</diffuse></material></visual>
+        <visual name="leg_right_rear"><pose>-0.1625 -0.0560 -0.0600 0 0 0</pose><geometry><box><size>0.035 0.035 0.0800</size></box></geometry><material><ambient>0.25 0.27 0.3 1</ambient><diffuse>0.25 0.27 0.3 1</diffuse></material></visual>
+      </link>
+      <link name="rollers">
+        <collision name="roller_front_collision"><pose>0.2050 0 -0.01 1.5708 0 0</pose><geometry><cylinder><radius>0.045</radius><length>0.1600</length></cylinder></geometry></collision>
+        <collision name="roller_rear_collision"><pose>-0.2050 0 -0.01 1.5708 0 0</pose><geometry><cylinder><radius>0.045</radius><length>0.1600</length></cylinder></geometry></collision>
+        <visual name="roller_front"><pose>0.2050 0 -0.01 1.5708 0 0</pose><geometry><cylinder><radius>0.045</radius><length>0.1600</length></cylinder></geometry><material><ambient>0.45 0.47 0.5 1</ambient><diffuse>0.45 0.47 0.5 1</diffuse></material></visual>
+        <visual name="roller_rear"><pose>-0.2050 0 -0.01 1.5708 0 0</pose><geometry><cylinder><radius>0.045</radius><length>0.1600</length></cylinder></geometry><material><ambient>0.45 0.47 0.5 1</ambient><diffuse>0.45 0.47 0.5 1</diffuse></material></visual>
+      </link>
+      <plugin filename="gz-sim-track-controller-system" name="gz::sim::systems::TrackController">
+        <link>belt</link>
+        <velocity_topic>/model/conveyor/link/belt/track_cmd_vel</velocity_topic>
+        <odometry_publish_frequency>10</odometry_publish_frequency>
+        <max_command_age>0.5</max_command_age>
+      </plugin>
+    </model>
+
+    <!-- Fixed overhead RGB-D sensor covering the conveyor and pick region. -->
+    <model name="overhead_camera">
+      <static>true</static>
+      <pose>0.3200 0.1400 0.8800 0 1.5708 0</pose>
+      <link name="mount">
+        <collision name="camera_housing_collision">
+          <pose>0 0 0.02 0 0 0</pose>
+          <geometry><box><size>0.12 0.07 0.04</size></box></geometry>
+        </collision>
+        <visual name="camera_housing">
+          <pose>0 0 0.02 0 0 0</pose>
+          <geometry><box><size>0.12 0.07 0.04</size></box></geometry>
+          <material><ambient>0.18 0.20 0.23 1</ambient><diffuse>0.18 0.20 0.23 1</diffuse></material>
+        </visual>
+        <visual name="camera_lens">
+          <pose>0 0 -0.012 0 1.5708 0</pose>
+          <geometry><cylinder><radius>0.018</radius><length>0.012</length></cylinder></geometry>
+          <material><ambient>0.03 0.05 0.08 1</ambient><diffuse>0.03 0.05 0.08 1</diffuse></material>
+        </visual>
+        <sensor name="camera_head" type="rgbd_camera">
+          <topic>/camera_head</topic>
+          <gz_frame_id>camera_head_color_optical_frame</gz_frame_id>
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <visualize>true</visualize>
+          <camera>
+            <horizontal_fov>1.5184</horizontal_fov>
+            <image><width>640</width><height>480</height></image>
+            <clip><near>0.05</near><far>2.0</far></clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- Thermal infrared tracker aligned with the overhead depth sensor. -->
+    <model name="infrared_tracker">
+      <static>true</static>
+      <pose>0.3200 0.1400 0.8800 0 1.5708 0</pose>
+      <link name="mount">
+        <collision name="infrared_housing_collision">
+          <pose>0 0.08 0.02 0 0 0</pose>
+          <geometry><box><size>0.08 0.06 0.04</size></box></geometry>
+        </collision>
+        <visual name="infrared_housing">
+          <pose>0 0.08 0.02 0 0 0</pose>
+          <geometry><box><size>0.08 0.06 0.04</size></box></geometry>
+          <material><ambient>0.34 0.12 0.10 1</ambient><diffuse>0.34 0.12 0.10 1</diffuse></material>
+        </visual>
+        <visual name="infrared_lens">
+          <pose>0 0.08 -0.012 0 1.5708 0</pose>
+          <geometry><cylinder><radius>0.014</radius><length>0.012</length></cylinder></geometry>
+          <material><ambient>0.08 0.03 0.03 1</ambient><diffuse>0.08 0.03 0.03 1</diffuse></material>
+        </visual>
+        <sensor name="infrared_tracker" type="thermal">
+          <topic>/camera_ir/image</topic>
+          <gz_frame_id>camera_ir_optical_frame</gz_frame_id>
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <camera>
+            <horizontal_fov>1.5184</horizontal_fov>
+            <image><width>640</width><height>480</height><format>L8</format></image>
+            <clip><near>0.05</near><far>2.0</far></clip>
+          </camera>
+          <plugin filename="gz-sim-thermal-sensor-system" name="gz::sim::systems::ThermalSensor">
+            <min_temp>285</min_temp><max_temp>320</max_temp><resolution>1.5</resolution>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- Side RGB-D camera mounted on a stand for red-block perception. -->
+    <model name="yolo_camera_stand">
+      <static>true</static>
+      <pose>0.3200 -0.2400 0.1650 0 0 0</pose>
+      <link name="stand">
+        <collision name="stand_collision"><geometry><box><size>0.05 0.05 0.3300</size></box></geometry></collision>
+        <visual name="stand_visual"><geometry><box><size>0.05 0.05 0.3300</size></box></geometry><material><ambient>0.25 0.27 0.3 1</ambient><diffuse>0.25 0.27 0.3 1</diffuse></material></visual>
+      </link>
+      <link name="camera_link">
+        <pose>0 0 0.1650 0 0 1.5708</pose>
+        <collision name="camera_housing_collision">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry><box><size>0.10 0.07 0.05</size></box></geometry>
+        </collision>
+        <visual name="camera_housing">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry><box><size>0.10 0.07 0.05</size></box></geometry>
+          <material><ambient>0.18 0.20 0.23 1</ambient><diffuse>0.18 0.20 0.23 1</diffuse></material>
+        </visual>
+        <visual name="camera_lens">
+          <pose>0.055 0 0 0 1.5708 0</pose>
+          <geometry><cylinder><radius>0.018</radius><length>0.012</length></cylinder></geometry>
+          <material><ambient>0.03 0.05 0.08 1</ambient><diffuse>0.03 0.05 0.08 1</diffuse></material>
+        </visual>
+        <sensor name="camera_yolo" type="rgbd_camera">
+          <topic>/camera_yolo</topic>
+          <gz_frame_id>camera_yolo_color_optical_frame</gz_frame_id>
+          <always_on>true</always_on><update_rate>10</update_rate>
+          <camera>
+            <horizontal_fov>1.5184</horizontal_fov>
+            <image><width>640</width><height>480</height></image>
+            <clip><near>0.05</near><far>2.0</far></clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- Open-top collection bin in the arm workspace. -->
+    <model name="collection_box">
+      <pose>0.1500 -0.1600 0.0500 0 0 0</pose>
+      <static>true</static>
+      <link name="bin">
+        <collision name="floor_collision"><pose>0 0 -0.0400 0 0 0</pose><geometry><box><size>0.1600 0.1600 0.02</size></box></geometry></collision>
+        <collision name="wall_x1"><pose>0.0700 0 0 0 0 0</pose><geometry><box><size>0.02 0.1600 0.1000</size></box></geometry></collision>
+        <collision name="wall_x2"><pose>-0.0700 0 0 0 0 0</pose><geometry><box><size>0.02 0.1600 0.1000</size></box></geometry></collision>
+        <collision name="wall_y1"><pose>0 0.0700 0 0 0 0</pose><geometry><box><size>0.1600 0.02 0.1000</size></box></geometry></collision>
+        <collision name="wall_y2"><pose>0 -0.0700 0 0 0 0</pose><geometry><box><size>0.1600 0.02 0.1000</size></box></geometry></collision>
+        <visual name="bin_visual"><pose>0 0 0 0 0 0</pose><geometry><box><size>0.1600 0.1600 0.1000</size></box></geometry><transparency>0.55</transparency><material><ambient>0.1 0.3 0.8 1</ambient><diffuse>0.1 0.3 0.8 1</diffuse></material></visual>
+      </link>
+    </model>
+  </world>
+</sdf>

@@ -9,9 +9,10 @@ endif()
 find_package(ament_cmake REQUIRED)
 #Copy necessary files to designated locations in the project
 install (
-  DIRECTORY scripts
-  DESTINATION share/s{PROJECT_NAME}
+  DIRECTORY launch scripts config
+  DESTINATION share/${PROJECT_NAME}
 )
+install(FILES README.md DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

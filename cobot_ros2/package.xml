@@ -13,6 +13,8 @@
   <exec_depend>cobot_bringup</exec_depend>  
   <exec_depend>cobot_moveit_config</exec_depend>  
   <exec_depend>cobot_system_tests</exec_depend>
+  <exec_depend>cobot_perception</exec_depend>
+  <exec_depend>cobot_manipulation</exec_depend>
   
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

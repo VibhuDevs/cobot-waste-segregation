@@ -1,0 +1,10 @@
+conveyor_manager:
+  ros__parameters:
+    velocity: 0.03
+    spawn_interval: 6.0
+    object_dimensions: [0.045, 0.045, 0.05]
+    object_mass: 0.08
+    max_objects: 8
+    spawn_x: 0.105
+    spawn_y: 0.14
+    spawn_z: 0.145

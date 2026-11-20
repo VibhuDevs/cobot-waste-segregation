@@ -12,8 +12,13 @@ and processing of URDF/XACRO files and controller configurations.
 import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
-from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.conditions import IfCondition
+from launch.substitutions import (
+    Command,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    PythonExpression,
+)
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
@@ -23,9 +28,8 @@ from ament_index_python.packages import get_package_share_directory
 def process_ros2_controllers_config(context):
     """Process the ROS 2 controller configuration yaml file before loading the URDF.
 
-    This function reads a template configuration file, replaces placeholder values
-    with actual configuration, and writes the processed file to both source and
-    install directories.
+    This function reads the installed template and writes the processed controller
+    configuration into the package share directory.
 
     Args:
         context: Launch context containing configuration values
@@ -161,7 +165,7 @@ def generate_launch_description():
         'base_type:=', LaunchConfiguration('base_type'), ' ',
         'flange_link:=', LaunchConfiguration('flange_link'), ' ',
         'gripper_type:=', LaunchConfiguration('gripper_type'), ' ',
-        'use_camera:=', LaunchConfiguration('use_camera'), ' ',
+        'use_camera:=', LaunchConfiguration('use_camera_sensor'), ' ',
         'use_gazebo:=', LaunchConfiguration('use_gazebo'), ' ',
         'use_gripper:=', LaunchConfiguration('use_gripper')
     ]), value_type=str)
@@ -182,7 +186,9 @@ def generate_launch_description():
         executable='joint_state_publisher',
         name='joint_state_publisher',
         parameters=[{'use_sim_time': use_sim_time}],
-        condition=IfCondition(use_jsp))
+        condition=IfCondition(PythonExpression([
+            "'", use_jsp, "' == 'true' and '", jsp_gui, "' != 'true'"
+        ])))
 
     # Depending on gui parameter, either launch joint_state_publisher or joint_state_publisher_gui
     start_joint_state_publisher_gui_cmd = Node(
@@ -190,7 +196,9 @@ def generate_launch_description():
         executable='joint_state_publisher_gui',
         name='joint_state_publisher_gui',
         parameters=[{'use_sim_time': use_sim_time}],
-        condition=IfCondition(jsp_gui))
+        condition=IfCondition(PythonExpression([
+            "'", use_jsp, "' == 'true' and '", jsp_gui, "' == 'true'"
+        ])))
 
     # Launch RViz
     start_rviz_cmd = Node(
@@ -214,6 +222,11 @@ def generate_launch_description():
     ld.add_action(declare_use_jsp_cmd) 
     ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_use_sim_time_cmd)
+    ld.add_action(DeclareLaunchArgument(
+        name='use_camera_sensor',
+        default_value=LaunchConfiguration('use_camera'),
+        choices=['true', 'false'],
+        description='Whether to include the robot-mounted RGB-D sensor in the URDF'))
 
     # Add any actions
     ld.add_action(start_joint_state_publisher_cmd)

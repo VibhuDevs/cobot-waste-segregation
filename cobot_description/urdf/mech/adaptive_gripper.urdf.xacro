@@ -217,6 +217,14 @@
         </material>
       </visual>
     </gazebo>
+    <gazebo reference="${prefix}gripper_left1">
+      <mu1>1.2</mu1>
+      <mu2>1.2</mu2>
+    </gazebo>
+    <gazebo reference="${prefix}gripper_right1">
+      <mu1>1.2</mu1>
+      <mu2>1.2</mu2>
+    </gazebo>
 
   </xacro:macro>
 </robot>

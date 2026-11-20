@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot name="cobot_280">
+  <group name="arm">
+    <chain base_link="base_link" tip_link="link6_flange"/>
+  </group>
+  <group name="gripper">
+    <joint name="gripper_controller"/>
+  </group>
+
+  <end_effector name="adaptive_gripper" parent_link="link6_flange"
+                group="gripper" parent_group="arm"/>
+
+  <group_state name="home" group="arm">
+    <joint name="link1_to_link2" value="0"/>
+    <joint name="link2_to_link3" value="0"/>
+    <joint name="link3_to_link4" value="0"/>
+    <joint name="link4_to_link5" value="0"/>
+    <joint name="link5_to_link6" value="0"/>
+    <joint name="link6_to_link6_flange" value="0"/>
+  </group_state>
+  <group_state name="open" group="gripper">
+    <joint name="gripper_controller" value="0.15"/>
+  </group_state>
+  <group_state name="closed" group="gripper">
+    <joint name="gripper_controller" value="-0.7"/>
+  </group_state>
+
+  <disable_collisions link1="base_link" link2="link1" reason="Adjacent"/>
+  <disable_collisions link1="link1" link2="link2" reason="Adjacent"/>
+  <disable_collisions link1="link2" link2="link3" reason="Adjacent"/>
+  <disable_collisions link1="link3" link2="link4" reason="Adjacent"/>
+  <disable_collisions link1="link4" link2="link5" reason="Adjacent"/>
+  <disable_collisions link1="link5" link2="link6" reason="Adjacent"/>
+  <disable_collisions link1="link6" link2="link6_flange" reason="Adjacent"/>
+  <disable_collisions link1="link6_flange" link2="gripper_base" reason="Adjacent"/>
+  <disable_collisions link1="gripper_base" link2="gripper_left3" reason="Adjacent"/>
+  <disable_collisions link1="gripper_base" link2="gripper_right3" reason="Adjacent"/>
+  <disable_collisions link1="gripper_left1" link2="gripper_right1" reason="Never"/>
+</robot>

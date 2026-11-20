@@ -1,0 +1,7 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: cobot_description
+    relative_path: urdf/robots/cobot_280.urdf.xacro
+    xacro_args: use_gazebo:=true use_camera:=true
+  srdf:
+    relative_path: config/cobot_280.srdf
